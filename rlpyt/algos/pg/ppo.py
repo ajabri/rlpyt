@@ -107,7 +107,10 @@ class PPO(PolicyGradientAlgo):
             dist_info, value = self.agent(*agent_inputs)
 
         # TODO IF MULTIAGENT, reshape things
-        
+        # Just kidding. It seems that the dist.* functions can operate on multi-dimensional tensors
+        # Need to double check this is true, but things seem to be ok
+            # (entropy and likelihood ratios are computed along last dim)
+
         dist = self.agent.distribution
 
         ratio = dist.likelihood_ratio(action, old_dist_info=old_dist_info,

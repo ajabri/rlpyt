@@ -1,9 +1,6 @@
 import sys
 
 
-# def make_dmc_env():
-
-
 # for pdb on error
 def info(type, value, tb):
     if hasattr(sys, 'ps1') or not sys.stderr.isatty():

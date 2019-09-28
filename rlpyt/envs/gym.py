@@ -8,7 +8,6 @@ from collections import namedtuple
 from rlpyt.envs.base import EnvSpaces, EnvStep
 from rlpyt.spaces.gym_wrapper import GymSpaceWrapper
 from rlpyt.utils.collections import is_namedtuple_class
-from rlpyt.spaces.composite import Composite
         
 
 class GymEnvWrapper(Wrapper):

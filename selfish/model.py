@@ -2,15 +2,12 @@ import torch
 import torch.nn as nn
 
 
-# class Encoder(nn.Module):
-#     def __init__(self, key, f):
-
-
-# class Skill(nn.Module):
-#     def __init__(self, key, f):
-#         super().__init__()
-#         self.key = torch.
-#         self.f
-
-#     def forward(self, x):
+'''
+ TODO
+ 0. Central agent baseline
+ 1. Implement shared relational encoder function (basically graph net / self-attention)
+ 1.a. Baseline: shared MLP action decoder function
+ 1.b. Skill Pool: action decoders indexed by key (basically a non-parametric mixture of experts)
+        Try different gating strategies
         
+'''

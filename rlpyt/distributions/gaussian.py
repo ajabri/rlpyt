@@ -12,8 +12,6 @@ DistInfo = namedarraytuple("DistInfo", ["mean"])
 DistInfoStd = namedarraytuple("DistInfoStd", ["mean", "log_std"])
 
 
-# class MultiAgentGaussian(Gaussian):
-
 class Gaussian(Distribution):
     """Multivariate Gaussian with independent variables (diagonal covariance).
     Standard deviation can be provided, as scalar or value per dimension, or it
