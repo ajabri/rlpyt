@@ -52,6 +52,7 @@ def build_samples_buffer(agent, env, batch_spec, bootstrap_value=False,
         done=done,
         env_info=env_info,
     )
+
     samples_np = Samples(agent=agent_buffer, env=env_buffer)
     samples_pyt = torchify_buffer(samples_np)
     return samples_pyt, samples_np, examples
@@ -66,6 +67,7 @@ def get_example_outputs(agent, env, examples, subprocess=False):
     o = env.reset()
     a = env.action_space.sample()
     o, r, d, env_info = env.step(a)
+
     r = np.asarray(r, dtype="float32")  # Must match torch float dtype here.
     agent.reset()
     agent_inputs = torchify_buffer(AgentInputs(o, a, r))

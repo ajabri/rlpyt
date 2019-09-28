@@ -31,6 +31,7 @@ class PPO(PolicyGradientAlgo):
             ratio_clip=0.1,
             linear_lr_schedule=True,
             normalize_advantage=False,
+            bootstrap_timelimit=False,
             ):
         if optim_kwargs is None:
             optim_kwargs = dict()
@@ -104,6 +105,9 @@ class PPO(PolicyGradientAlgo):
             dist_info, value, _rnn_state = self.agent(*agent_inputs, init_rnn_state)
         else:
             dist_info, value = self.agent(*agent_inputs)
+
+        # TODO IF MULTIAGENT, reshape things
+        
         dist = self.agent.distribution
 
         ratio = dist.likelihood_ratio(action, old_dist_info=old_dist_info,

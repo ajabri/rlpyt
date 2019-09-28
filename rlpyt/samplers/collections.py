@@ -46,6 +46,7 @@ class TrajInfo(AttrDict):
         self._cur_discount = 1
 
     def step(self, observation, action, reward, done, agent_info, env_info):
+        reward = reward.mean() if hasattr(reward, 'mean') else reward
         self.Length += 1
         self.Return += reward
         self.NonzeroRewards += reward != 0

@@ -109,3 +109,4 @@ def nt_to_dict(value):
     if is_namedtuple(value):
         return {k: nt_to_dict(v) for k, v in zip(value._fields, value)}
     return value
+

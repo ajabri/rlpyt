@@ -20,7 +20,11 @@ class CpuResetCollector(DecorrelatingStartCollector):
         observation, action, reward = agent_inputs
         obs_pyt, act_pyt, rew_pyt = torchify_buffer(agent_inputs)
         agent_buf.prev_action[0] = action  # Leading prev_action.
+
+        if env_buf.prev_reward[0].ndim > reward.ndim:
+            reward = reward[:, None].repeat(env_buf.prev_reward[0].shape[-1], -1)
         env_buf.prev_reward[0] = reward
+        
         self.agent.sample_mode(itr)
         for t in range(self.batch_T):
             env_buf.observation[t] = observation
@@ -77,7 +81,11 @@ class CpuWaitResetCollector(DecorrelatingStartCollector):
         self.done[:] = False  # Did resets between batches.
         obs_pyt, act_pyt, rew_pyt = torchify_buffer(agent_inputs)
         agent_buf.prev_action[0] = action  # Leading prev_action.
+
+        if env_buf.prev_reward[0].ndim > reward.ndim:
+            reward = reward[:, None].repeat(env_buf.prev_reward[0].shape[-1], -1)
         env_buf.prev_reward[0] = reward
+
         self.agent.sample_mode(itr)
         for t in range(self.batch_T):
             env_buf.observation[t] = observation

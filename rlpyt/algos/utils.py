@@ -11,6 +11,7 @@ def discount_return(reward, done, bootstrap_value, discount, return_dest=None):
         reward.shape, dtype=reward.dtype)
     nd = 1 - done
     nd = nd.type(reward.dtype) if isinstance(nd, torch.Tensor) else nd
+    nd = nd[:, :, None] if reward.ndim == 3 else nd
     return_[-1] = reward[-1] + discount * bootstrap_value * nd[-1]
     for t in reversed(range(len(reward) - 1)):
         return_[t] = reward[t] + return_[t + 1] * discount * nd[t]
@@ -26,6 +27,7 @@ def generalized_advantage_estimation(reward, value, done, bootstrap_value,
         reward.shape, dtype=reward.dtype)
     nd = 1 - done
     nd = nd.type(reward.dtype) if isinstance(nd, torch.Tensor) else nd
+    nd = nd[:, :, None] if reward.ndim == 3 else nd
     advantage[-1] = reward[-1] + discount * bootstrap_value * nd[-1] - value[-1]
     for t in reversed(range(len(reward) - 1)):
         delta = reward[t] + discount * value[t + 1] * nd[t] - value[t]
