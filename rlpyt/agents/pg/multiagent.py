@@ -28,7 +28,7 @@ class MultiAgentGaussianPgAgent(BaseAgent):
 
         for _a_space in env_spaces.action.space:
             assert len(_a_space.shape) == 1
-            assert len(np.unique(_a_space.high)) == 1
+            # assert len(np.unique(_a_space.high)) == 1
             assert np.all(_a_space.low == -_a_space.high)
             
         self.distribution = Gaussian(

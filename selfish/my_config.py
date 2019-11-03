@@ -9,7 +9,7 @@ config = dict(
         discount=0.99,
         learning_rate=3e-4,
         clip_grad_norm=1e6,
-        entropy_loss_coeff=0.0,
+        entropy_loss_coeff=0.01,
         gae_lambda=0.95,
         minibatches=32,
         epochs=10,
@@ -22,7 +22,7 @@ config = dict(
     model=dict(),
     optim=dict(),
     runner=dict(
-        n_steps=1e6,
+        n_steps=1e9,
         log_interval_steps=2048 * 10,
     ),
     sampler=dict(

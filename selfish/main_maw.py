@@ -3,9 +3,12 @@ import numpy as np
 
 # Environments stuff
 import gym
-from dm_control.locomotion import soccer as dm_soccer
 import dmc_wrapper as dmc2gym
+from rlpyt.envs.gym import GymEnvWrapper
 
+import sys
+sys.path.append('../../multiagentworld')
+import maw
 
 # rlpyt stuff
 from rlpyt.samplers.serial.sampler import SerialSampler
@@ -18,7 +21,6 @@ from rlpyt.agents.pg.multiagent import MultiAgentGaussianPgAgent, MultiFfAgent
 from rlpyt.runners.minibatch_rl import MinibatchRl
 from rlpyt.utils.logging.context import logger_context
 
-from rlpyt.envs.gym import GymEnvWrapper
 
 # from rlpyt.experiments.configs.mujoco.pg.mujoco_ppo import configs
 from my_config import configs
@@ -28,7 +30,8 @@ import utils
 
 def make_env():
     # Load the 2-vs-2 soccer environment with episodes of 10 seconds:
-    dm_env = dm_soccer.load(team_size=2, time_limit=10.)
+    dm_env = maw.load(team_size=1, time_limit=100., task_id='MaxHeightTask')
+    #dm_env = dm_soccer.load(team_size=2, time_limit=10.)
     env = GymEnvWrapper(dmc2gym.DmControlWrapper('', '', env=dm_env))
     return env
 
@@ -48,7 +51,7 @@ def build_and_train(log_dir, run_ID, config_key):
 
     config = configs[config_key]
 
-    sampler = CpuSampler(
+    sampler = SerialSampler(
         EnvCls=make_env,
         env_kwargs={},
         CollectorCls=CpuResetCollector,

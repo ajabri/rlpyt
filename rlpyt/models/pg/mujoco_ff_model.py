@@ -43,7 +43,7 @@ class MujocoFfModel(torch.nn.Module):
         """Feedforward layers process as [T*B,H]. Return same leading dims as
         input, can be [T,B], [B], or []."""
 
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         # Infer (presence of) leading dimensions: [T,B], [B], or [].
         lead_dim, T, B, _ = infer_leading_dims(observation, self._obs_ndim)
 

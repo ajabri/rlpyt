@@ -117,8 +117,9 @@ def convertObservation(spec_obs):
         space_obs = np.zeros((numdim,))
         i = 0
         for key in spec_obs:
-            space_obs[i:i+np.prod(spec_obs[key].shape)] = spec_obs[key].ravel()
-            i += np.prod(spec_obs[key].shape)
+            _i = np.int(np.prod(spec_obs[key].shape))
+            space_obs[i:i+_i] = spec_obs[key].ravel()
+            i += _i
         return space_obs
 
 

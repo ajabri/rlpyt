@@ -240,6 +240,11 @@ class MinibatchRlEval(MinibatchRlBase):
                 if (itr + 1) % self.log_interval_itrs == 0:
                     eval_traj_infos, eval_time = self.evaluate_agent(itr)
                     self.log_diagnostics(itr, eval_traj_infos, eval_time)
+                if (itr + 1) % self.viz_interval_itrs == 0:
+                    # HACK make a new sampler?
+                    eval_traj_infos, eval_time = self.evaluate_agent(itr)
+                    self.log_diagnostics(itr, eval_traj_infos, eval_time)
+
         self.shutdown()
 
     def evaluate_agent(self, itr):
