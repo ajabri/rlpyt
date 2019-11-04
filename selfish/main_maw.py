@@ -10,6 +10,9 @@ import sys
 sys.path.append('../../multiagentworld')
 import maw
 
+from absl import logging
+logging.set_verbosity(logging.ERROR)
+
 # rlpyt stuff
 from rlpyt.samplers.serial.sampler import SerialSampler
 from rlpyt.samplers.parallel.cpu.sampler import CpuSampler
@@ -67,9 +70,9 @@ def build_and_train(log_dir, run_ID, config_key):
         **config["runner"]
     )
     name = config["env"]["id"]
+
     with logger_context(log_dir, run_ID, name, config):
         runner.train()
 
 
-build_and_train('logs/', 'test', "ppo_1M_cpu")
-    
+build_and_train('logs/', 'test_2pm', "ppo_1M_cpu")
