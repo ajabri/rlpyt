@@ -55,9 +55,10 @@ class Batch(Tuple):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.shape = np.asarray(self.sample()).shape
+        self.shape = (len(self.spaces), self.spaces[0].shape[0])
 
     def sample(self):
+        # import pdb; pdb.set_trace()
         return [space.sample() for space in self.spaces]
         # return np.concatenate([space.sample() for space in self.spaces])
 

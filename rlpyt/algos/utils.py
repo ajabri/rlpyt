@@ -27,7 +27,7 @@ def generalized_advantage_estimation(reward, value, done, bootstrap_value,
         reward.shape, dtype=reward.dtype)
     nd = 1 - done
     nd = nd.type(reward.dtype) if isinstance(nd, torch.Tensor) else nd
-    nd = nd[:, :, None] if reward.ndim == 3 else nd
+    nd = nd[:, :, None] if len(reward.shape) == 3 else nd
     advantage[-1] = reward[-1] + discount * bootstrap_value * nd[-1] - value[-1]
     for t in reversed(range(len(reward) - 1)):
         delta = reward[t] + discount * value[t + 1] * nd[t] - value[t]

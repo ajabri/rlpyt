@@ -30,7 +30,7 @@ import utils
 
 def make_env():
     # Load the 2-vs-2 soccer environment with episodes of 10 seconds:
-    dm_env = maw.load(team_size=1, time_limit=100., task_id='MaxHeightTask')
+    dm_env = maw.load(team_size=1, time_limit=10., task_id='MaxHeightTask')
     #dm_env = dm_soccer.load(team_size=2, time_limit=10.)
     env = GymEnvWrapper(dmc2gym.DmControlWrapper('', '', env=dm_env))
     return env
