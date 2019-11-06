@@ -88,11 +88,11 @@ def vis_trajs(samples, itr):
 ##################### Parallelization stuff #####################
 
 affinity_code = encode_affinity(
-    n_cpu_core=2,
+    n_cpu_core=8,
     n_gpu=0,
     hyperthread_offset=2,
     n_socket=1,
-    # cpu_per_run=8,
+    cpu_per_run=4,
 )
 
 
