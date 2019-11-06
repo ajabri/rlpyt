@@ -37,6 +37,7 @@ parser.add_argument("--task-id", default="MaxHeightTask", type=str)
 parser.add_argument("--team-size", default=1, type=int)
 parser.add_argument("--time-limit", default=10., type=float)
 parser.add_argument("--test", default=False, action="store_true")
+parser.add_argument("--reload-path", default="", type=str)
 
 args = parser.parse_args()
 args.exp_name = "%s_%s" % (args.exp_name, '-'.join(
@@ -127,12 +128,15 @@ def build_and_test(model_path, config_key):
     import dmc_wrapper
     from dm_control import viewer
     from rlpyt.utils.buffer import buffer_from_example, torchify_buffer, numpify_buffer
+    import torch
 
     config = configs[config_key]
 
+    reloaded = torch.load(model_path) if len(model_path) > 0 else None
+    # import pdb; pdb.set_trace()
     agent = MultiFfAgent(
         model_kwargs=config["model"],
-        # initial_model_state_dict=torch.load(model_path),
+        initial_model_state_dict=reloaded['agent_state_dict'],
         **config["agent"])
 
     dm_env = maw.load(
@@ -143,7 +147,7 @@ def build_and_test(model_path, config_key):
 
     agent.initialize(env.spaces)
     agent.reset()
-    agent.eval_mode(0)
+    # agent.eval_mode(0)
 
     prev_action = env.action_space.null_value()
 
@@ -168,6 +172,6 @@ def build_and_test(model_path, config_key):
 
 
 if args.test:
-    build_and_test("", "ppo_1M_cpu")
+    build_and_test(args.reload_path, "ppo_1M_cpu")
 else:
-    build_and_train('', args.exp_name, "ppo_1M_cpu")
+    build_and_train("", args.exp_name, "ppo_1M_cpu")
