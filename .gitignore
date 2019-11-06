@@ -1,13 +1,16 @@
-
 # To store all experiment data locally only.
-/data/  
+#/data/  
 # For quick local testing.
 /scratch/ 
+
+# visualizations
+*.gif
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
