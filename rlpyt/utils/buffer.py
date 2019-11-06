@@ -40,10 +40,7 @@ def torchify_buffer(buffer_):
     if buffer_ is None:
         return
     if isinstance(buffer_, np.ndarray):
-        if 'bool' in str(buffer_.dtype):
-            return(torch.from_numpy(buffer_.astype(np.uint8)).byte())
-        else:
-            return torch.from_numpy(buffer_)
+        return torch.from_numpy(buffer_)
     elif isinstance(buffer_, torch.Tensor):
         return buffer_
     contents = tuple(torchify_buffer(b) for b in buffer_)

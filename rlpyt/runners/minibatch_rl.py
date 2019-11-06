@@ -25,6 +25,7 @@ class MinibatchRlBase(BaseRunner):
             seed=None,
             affinity=None,
             log_interval_steps=1e5,
+            diag_fn=None,
             ):
         n_steps = int(n_steps)
         log_interval_steps = int(log_interval_steps)
@@ -195,9 +196,11 @@ class MinibatchRl(MinibatchRlBase):
                 self.agent.train_mode(itr)
                 opt_info = self.algo.optimize_agent(itr, samples)
                 self.store_diagnostics(itr, traj_infos, opt_info)
+                # import pdb; pdb.set_trace()
                 if (itr + 1) % self.log_interval_itrs == 0:
                     self.log_diagnostics(itr)
-                    # import pdb; pdb.set_trace()
+                    if self.diag_fn is not None:
+                        self.diag_fn(samples, itr)
 
         self.shutdown()
 

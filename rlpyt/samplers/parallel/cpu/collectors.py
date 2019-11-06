@@ -45,6 +45,8 @@ class CpuResetCollector(DecorrelatingStartCollector):
                 observation[b] = o
                 reward[b] = r
                 env_buf.done[t, b] = d
+                # if d or  getattr(env_info, "traj_done", d):
+                #     import pdb; pdb.set_trace()
                 if env_info:
                     env_buf.env_info[t, b] = env_info
             agent_buf.action[t] = action

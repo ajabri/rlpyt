@@ -18,7 +18,7 @@ config = dict(
         linear_lr_schedule=True,
         bootstrap_timelimit=False,
     ),
-    env=dict(id="soccer-v1"),
+    env=dict(id="maw-v1"),
     model=dict(),
     optim=dict(),
     runner=dict(
@@ -27,7 +27,7 @@ config = dict(
     ),
     sampler=dict(
         batch_T=2048,
-        batch_B=1,
+        batch_B=8,
         max_decorrelation_steps=0,
     ),
 )
@@ -38,7 +38,7 @@ config = copy.deepcopy(configs["ppo_1M_serial"])
 
 config = copy.deepcopy(configs["ppo_1M_serial"])
 config["sampler"]["batch_B"] = 8
-config["sampler"]["batch_T"] = 256
+config["sampler"]["batch_T"] = 400
 configs["ppo_1M_cpu"] = config
 
 config["algo"]["minibatches"] = 1
