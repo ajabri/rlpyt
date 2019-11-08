@@ -37,6 +37,7 @@ parser.add_argument("--task-id", default="MaxHeightTask", type=str)
 parser.add_argument("--team-size", default=1, type=int)
 parser.add_argument("--time-limit", default=10., type=float)
 parser.add_argument("--test", default=False, action="store_true")
+parser.add_argument("--no-hfield", default=False, action="store_true")
 parser.add_argument("--reload-path", default="", type=str)
 
 args = parser.parse_args()
@@ -51,6 +52,7 @@ def make_env():
     dm_env = maw.load(
         team_size=args.team_size,
         time_limit=args.time_limit,
+        terrain=not args.no_hfield,
         task_id=args.task_id)
     #dm_env = dm_soccer.load(team_size=2, time_limit=10.)
     env = GymEnvWrapper(dmc2gym.DmControlWrapper('', '', env=dm_env))
@@ -142,6 +144,7 @@ def build_and_test(model_path, config_key):
     dm_env = maw.load(
         team_size=args.team_size,
         time_limit=args.time_limit,
+        terrain=not args.no_hfield,
         task_id=args.task_id)
     env = GymEnvWrapper(dmc2gym.DmControlWrapper('', '', env=dm_env))
 
