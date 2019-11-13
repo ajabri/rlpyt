@@ -34,6 +34,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--exp-name", default="test_maw", type=str)
 parser.add_argument("--task-id", default="MaxHeightTask", type=str)
+parser.add_argument("--agent-type", default="BoxHead", type=str)
 parser.add_argument("--team-size", default=1, type=int)
 parser.add_argument("--time-limit", default=10., type=float)
 parser.add_argument("--test", default=False, action="store_true")
@@ -42,7 +43,7 @@ parser.add_argument("--reload-path", default="", type=str)
 
 args = parser.parse_args()
 args.exp_name = "%s_%s" % (args.exp_name, '-'.join(
-    ["%s:%s" % (k, getattr(args, k)) for k in ['task_id', 'team_size']]))
+    ["%s:%s" % (k, getattr(args, k)) for k in ['task_id', 'team_size', 'agent_type']]))
 
 ##################### Env constructor #####################
 
@@ -53,6 +54,8 @@ def make_env():
         team_size=args.team_size,
         time_limit=args.time_limit,
         terrain=not args.no_hfield,
+        agent_type=args.agent_type,
+        raise_exception_on_physics_error=False,
         task_id=args.task_id)
     #dm_env = dm_soccer.load(team_size=2, time_limit=10.)
     env = GymEnvWrapper(dmc2gym.DmControlWrapper('', '', env=dm_env))
@@ -95,7 +98,7 @@ affinity_code = encode_affinity(
     n_gpu=0,
     hyperthread_offset=2,
     n_socket=1,
-    cpu_per_run=4,
+    cpu_per_run=8,
 )
 
 
@@ -145,6 +148,7 @@ def build_and_test(model_path, config_key):
         team_size=args.team_size,
         time_limit=args.time_limit,
         terrain=not args.no_hfield,
+        agent_type=args.agent_type,
         task_id=args.task_id)
     env = GymEnvWrapper(dmc2gym.DmControlWrapper('', '', env=dm_env))
 
