@@ -36,7 +36,7 @@ parser.add_argument("--exp-name", default="test_maw", type=str)
 parser.add_argument("--task-id", default="MaxHeightTask", type=str)
 parser.add_argument("--agent-type", default="BoxHead", type=str)
 parser.add_argument("--team-size", default=1, type=int)
-parser.add_argument("--time-limit", default=10., type=float)
+parser.add_argument("--time-limit", default=20., type=float)
 parser.add_argument("--test", default=False, action="store_true")
 parser.add_argument("--no-hfield", default=False, action="store_true")
 parser.add_argument("--reload-path", default="", type=str)
@@ -98,7 +98,7 @@ affinity_code = encode_affinity(
     n_gpu=0,
     hyperthread_offset=2,
     n_socket=1,
-    cpu_per_run=8,
+    cpu_per_run=4,
 )
 
 
