@@ -9,7 +9,7 @@ config = dict(
         discount=0.99,
         learning_rate=3e-4,
         clip_grad_norm=1e6,
-        entropy_loss_coeff=0.001,
+        entropy_loss_coeff=0.005,
         gae_lambda=0.95,
         minibatches=32,
         epochs=10,
@@ -38,7 +38,7 @@ config = copy.deepcopy(configs["ppo_1M_serial"])
 
 config = copy.deepcopy(configs["ppo_1M_serial"])
 config["sampler"]["batch_B"] = 8
-config["sampler"]["batch_T"] = 400
+config["sampler"]["batch_T"] = 800
 configs["ppo_1M_cpu"] = config
 
 config["algo"]["minibatches"] = 1

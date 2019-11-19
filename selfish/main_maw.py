@@ -38,12 +38,13 @@ parser.add_argument("--agent-type", default="BoxHead", type=str)
 parser.add_argument("--team-size", default=1, type=int)
 parser.add_argument("--time-limit", default=20., type=float)
 parser.add_argument("--test", default=False, action="store_true")
+parser.add_argument("--random-spawn", default=False, action="store_true")
 parser.add_argument("--no-hfield", default=False, action="store_true")
 parser.add_argument("--reload-path", default="", type=str)
 
 args = parser.parse_args()
 args.exp_name = "%s_%s" % (args.exp_name, '-'.join(
-    ["%s:%s" % (k, getattr(args, k)) for k in ['task_id', 'team_size', 'agent_type']]))
+    ["%s=%s" % (k, getattr(args, k)) for k in ['task_id', 'team_size', 'agent_type']]))
 
 ##################### Env constructor #####################
 
@@ -55,6 +56,7 @@ def make_env():
         time_limit=args.time_limit,
         terrain=not args.no_hfield,
         agent_type=args.agent_type,
+        deterministic_spawn=not args.random_spawn,
         raise_exception_on_physics_error=False,
         task_id=args.task_id)
     #dm_env = dm_soccer.load(team_size=2, time_limit=10.)
@@ -94,11 +96,11 @@ def vis_trajs(samples, itr):
 ##################### Parallelization stuff #####################
 
 affinity_code = encode_affinity(
-    n_cpu_core=8,
+    n_cpu_core=12,
     n_gpu=0,
-    hyperthread_offset=2,
+    hyperthread_offset=1,
     n_socket=1,
-    cpu_per_run=4,
+    cpu_per_run=12,
 )
 
 
@@ -149,7 +151,10 @@ def build_and_test(model_path, config_key):
         time_limit=args.time_limit,
         terrain=not args.no_hfield,
         agent_type=args.agent_type,
+        deterministic_spawn=not args.random_spawn,
+        raise_exception_on_physics_error=False,
         task_id=args.task_id)
+
     env = GymEnvWrapper(dmc2gym.DmControlWrapper('', '', env=dm_env))
 
     agent.initialize(env.spaces)
