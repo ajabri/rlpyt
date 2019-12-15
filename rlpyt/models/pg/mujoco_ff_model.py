@@ -1,4 +1,3 @@
-
 import numpy as np
 import torch
 
@@ -66,6 +65,7 @@ class MultiFfModel(torch.nn.Module):
             hidden_nonlinearity=torch.nn.Tanh,  # Module form.
             mu_nonlinearity=torch.nn.Tanh,  # Module form.
             init_log_std=0.,
+            pooling="average",
             ):
         super().__init__()
         self._obs_ndim = len(observation_shape)
@@ -74,6 +74,11 @@ class MultiFfModel(torch.nn.Module):
         input_size = int(observation_shape[-1])
         output_size = int(action_size[-1])
         hidden_sizes = hidden_sizes or [64, 64]
+
+        self.pooling = pooling
+        # self.pool = self.make_pooler(pooling)
+        if self.pooling is not None:
+            input_size *=2
 
         mu_mlp = MlpModel(
             input_size=input_size,
@@ -93,14 +98,35 @@ class MultiFfModel(torch.nn.Module):
         )
         self.log_std = torch.nn.Parameter(init_log_std * torch.ones(action_size))
 
+    def make_pooler(self, pooling):
+        def _avg(x):
+            return x.mean(-2)
+        def _max(x):
+            return x.max(-2)
+
+        if pooling == 'average':
+            self.pool = _avg
+        elif pooling == 'max':
+            self.pool = _max
+        else:
+            self.pool = None
+
     def forward(self, observation, prev_action, prev_reward):
         """Feedforward layers process as [T*B,H]. Return same leading dims as
         input, can be [T,B], [B], or []."""
 
-        
+        if self.pooling is not None:
+            if self.pooling == 'average':
+                pooled = observation.mean(-2)
+
+            elif self.pooling == 'max':
+                pooled = observation.max(-2)
+            
+            pooled = pooled.unsqueeze(-2).expand_as(observation)
+            observation = torch.cat([observation, pooled], dim=-1)
+
         # Infer (presence of) leading dimensions: [T,B], [B], or [].
         lead_dim, T, B, _ = infer_leading_dims(observation, self._obs_ndim)
-
         obs_flat = observation.view(T * B * self._n_pop, -1)
 
         mu = self.mu(obs_flat)
@@ -110,8 +136,6 @@ class MultiFfModel(torch.nn.Module):
         mu = mu.view(T * B, self._n_pop, -1)
         v = v.view(T * B, self._n_pop)
         log_std = log_std.view(T * B, self._n_pop, -1)
-
-        # import pdb; pdb.set_trace()
 
         # Restore leading dimensions: [T,B], [B], or [], as input.
         mu, log_std, v = restore_leading_dims((mu, log_std, v), lead_dim, T, B)
