@@ -20,7 +20,7 @@ from rlpyt.samplers.parallel.cpu.collectors import CpuResetCollector
 # from rlpyt.envs.gym import make as gym_make
 from rlpyt.algos.pg.ppo import PPO
 from rlpyt.agents.pg.mujoco import MujocoFfAgent
-from rlpyt.agents.pg.multiagent import MultiAgentGaussianPgAgent, MultiFfAgent
+from rlpyt.agents.pg.multiagent import MultiAgentGaussianPgAgent
 from rlpyt.runners.minibatch_rl import MinibatchRl, MinibatchRlEval
 from rlpyt.utils.logging.context import logger_context, get_log_dir
 
@@ -28,6 +28,8 @@ from my_config import configs
 from rlpyt.utils.launching.affinity import get_n_run_slots, prepend_run_slot, affinity_from_code, encode_affinity
 
 import utils
+from model import MultiFfModel
+from agent import MultiFfAgent
 
 ##################### ARGS #####################
 import argparse
